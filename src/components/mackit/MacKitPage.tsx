@@ -2,17 +2,16 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { APPS, CATEGORIES, PRESETS } from './data';
-import type { CategoryGroup, Preset } from './types';
-import { generateCmd } from './utils';
-
 import AppGrid from './AppGrid';
 import CategoryNav from './CategoryNav';
 import CommandBar from './CommandBar';
 import Header from './Header';
 import PrereqBanner from './PrereqBanner';
 import PresetBar from './PresetBar';
+import { APPS, CATEGORIES, PRESETS } from './data';
 import s from './mackit.module.css';
+import type { CategoryGroup, Preset } from './types';
+import { generateCmd } from './utils';
 
 const COPY_FEEDBACK_MS = 2200;
 const LS_KEY = 'mackit-sel';
@@ -87,7 +86,7 @@ const MacKitPage = () => {
 
     const activePreset = useMemo(
         () => PRESETS.find((p) => p.ids.length === selected.size && p.ids.every((id) => selected.has(id))),
-        [selected],
+        [selected]
     );
 
     const filtered = useMemo(() => {
@@ -98,7 +97,7 @@ const MacKitPage = () => {
                 (!lq ||
                     a.name.toLowerCase().includes(lq) ||
                     a.brew.toLowerCase().includes(lq) ||
-                    a.desc.toLowerCase().includes(lq)),
+                    a.desc.toLowerCase().includes(lq))
         );
     }, [activeCategory, query]);
 
@@ -119,7 +118,6 @@ const MacKitPage = () => {
     }, [filtered, activeCategory]);
 
     const commands = useMemo(() => generateCmd(selected, APPS), [selected]);
-
     const selectedApps = useMemo(() => APPS.filter((a) => selected.has(a.id)), [selected]);
 
     const catCounts = useMemo(() => {
@@ -130,7 +128,6 @@ const MacKitPage = () => {
         return counts;
     }, [selected]);
 
-    // Select-all for single-category view
     const catApps = activeCategory !== 'all' ? APPS.filter((a) => a.cat === activeCategory) : [];
     const allInCatSelected = catApps.length > 0 && catApps.every((a) => selected.has(a.id));
 
@@ -154,11 +151,7 @@ const MacKitPage = () => {
     }, [commands]);
 
     const handleShare = useCallback(() => {
-        const url =
-            window.location.origin +
-            window.location.pathname +
-            '#' +
-            [...selected].join(',');
+        const url = window.location.origin + window.location.pathname + '#' + [...selected].join(',');
         navigator.clipboard.writeText(url).then(() => {
             setShared(true);
             setTimeout(() => setShared(false), COPY_FEEDBACK_MS);
@@ -173,11 +166,7 @@ const MacKitPage = () => {
 
             {showPrereq && <PrereqBanner onDismiss={() => setShowPrereq(false)} />}
 
-            <PresetBar
-                presets={PRESETS}
-                activePresetId={activePreset?.id}
-                onApply={applyPreset}
-            />
+            <PresetBar presets={PRESETS} activePresetId={activePreset?.id} onApply={applyPreset} />
 
             <CategoryNav
                 categories={CATEGORIES}
@@ -210,9 +199,7 @@ const MacKitPage = () => {
                 onRemoveApp={toggle}
             />
 
-            {selected.size === 0 && (
-                <div className={s.kbdHint}>press / to search</div>
-            )}
+            {selected.size === 0 && <div className={s.kbdHint}>press / to search</div>}
         </div>
     );
 };

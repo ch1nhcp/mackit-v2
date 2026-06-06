@@ -12,8 +12,7 @@ const Header = forwardRef<HTMLInputElement, HeaderProps>(({ query, onQueryChange
         <header className={s.hdr}>
             <div>
                 <div className={s.logo}>
-                    <span className={s.logoDollar}>$</span>&nbsp;mackit
-                    <span className={s.logoBlink} aria-hidden='true' />
+                    <span className={s.logoDollar} style={{ fontSize: '1.8rem' }}>⌘</span>&nbsp;mackit
                 </div>
                 <div className={s.tagline}>
                     // select apps → copy brew command → paste in terminal → done.
