@@ -1,3 +1,5 @@
+import { forwardRef } from 'react';
+
 import s from './mackit.module.css';
 
 interface HeaderProps {
@@ -5,7 +7,7 @@ interface HeaderProps {
     onQueryChange: (q: string) => void;
 }
 
-const Header = ({ query, onQueryChange }: HeaderProps) => {
+const Header = forwardRef<HTMLInputElement, HeaderProps>(({ query, onQueryChange }, ref) => {
     return (
         <header className={s.hdr}>
             <div>
@@ -21,9 +23,10 @@ const Header = ({ query, onQueryChange }: HeaderProps) => {
             <div className={s.searchWrap}>
                 <span className={s.searchSlash} aria-hidden='true'>/</span>
                 <input
+                    ref={ref}
                     className={s.searchInp}
                     type='search'
-                    placeholder='search apps...'
+                    placeholder='search apps... ( / )'
                     value={query}
                     onChange={(e) => onQueryChange(e.target.value)}
                     aria-label='Search apps'
@@ -31,6 +34,8 @@ const Header = ({ query, onQueryChange }: HeaderProps) => {
             </div>
         </header>
     );
-};
+});
+
+Header.displayName = 'Header';
 
 export default Header;

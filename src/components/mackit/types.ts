@@ -29,3 +29,9 @@ export interface CategoryGroup {
     label: string;
     apps: App[];
 }
+
+export interface Preset {
+    id: string;
+    label: string;
+    ids: string[];
+}
