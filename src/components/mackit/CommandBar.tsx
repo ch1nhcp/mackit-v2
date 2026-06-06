@@ -1,10 +1,12 @@
 'use client';
 
-import type { App } from './types';
 import CommandRow from './CommandRow';
+import type { Translations } from './i18n';
 import s from './mackit.module.css';
+import type { App } from './types';
 
 interface CommandBarProps {
+    t: Translations;
     selectedApps: App[];
     commands: string[];
     copied: boolean;
@@ -16,6 +18,7 @@ interface CommandBarProps {
 }
 
 const CommandBar = ({
+    t,
     selectedApps,
     commands,
     copied,
@@ -23,45 +26,31 @@ const CommandBar = ({
     onCopy,
     onShare,
     onReset,
-    onRemoveApp,
+    onRemoveApp
 }: CommandBarProps) => {
-    const visible = selectedApps.length > 0;
     const count = selectedApps.length;
+    const visible = count > 0;
 
     return (
         <div className={`${s.bot} ${visible ? s.botOn : ''}`} aria-live='polite'>
             <div className={s.botTop}>
-                <span className={s.botCount}>
-                    <strong className={s.botCountNum}>{count}</strong>{' '}
-                    app{count !== 1 ? 's' : ''} selected
-                </span>
+                <span className={s.botCount}>{t.selectedCount(count)}</span>
                 <div className={s.botBtns}>
                     <button className={s.btnGhost} onClick={onReset}>
-                        reset
+                        {t.reset}
                     </button>
-                    <button
-                        className={`${s.btnGhost} ${shared ? s.btnGhostOk : ''}`}
-                        onClick={onShare}
-                    >
-                        {shared ? '✓ link copied!' : 'share'}
+                    <button className={`${s.btnGhost} ${shared ? s.btnGhostOk : ''}`} onClick={onShare}>
+                        {shared ? t.shareOk : t.share}
                     </button>
-                    <button
-                        className={`${s.btnCopy} ${copied ? s.btnCopyOk : ''}`}
-                        onClick={onCopy}
-                    >
-                        {copied ? '✓ copied!' : 'copy command'}
+                    <button className={`${s.btnCopy} ${copied ? s.btnCopyOk : ''}`} onClick={onCopy}>
+                        {copied ? t.copyOk : t.copyCmd}
                     </button>
                 </div>
             </div>
 
             <div className={s.chipsRow}>
                 {selectedApps.map((app) => (
-                    <span
-                        key={app.id}
-                        className={s.chip}
-                        onClick={() => onRemoveApp(app.id)}
-                        title='click to remove'
-                    >
+                    <span key={app.id} className={s.chip} onClick={() => onRemoveApp(app.id)} title='click to remove'>
                         {app.name} <span className={s.chipX}>×</span>
                     </span>
                 ))}

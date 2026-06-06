@@ -61,6 +61,36 @@
     margin-top: 7px;
 }
 
+/* ── Header right cluster (lang selector + search) ── */
+.hdrRight {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ── Language selector ── */
+.langSel {
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--mk-sf)
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238B949E' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+        no-repeat right 10px center;
+    border: 1px solid var(--mk-bd2);
+    border-radius: 6px;
+    color: var(--mk-fg2);
+    cursor: pointer;
+    font-family: var(--mk-font);
+    font-size: 0.775rem;
+    outline: none;
+    padding: 9px 30px 9px 12px;
+    transition: border-color 0.12s, color 0.12s;
+}
+
+.langSel:hover,
+.langSel:focus { border-color: var(--mk-gr); color: var(--mk-fg); }
+
+.langSel option { background: var(--mk-sf2); color: var(--mk-fg); }
+
 /* ── Search ── */
 .searchWrap { position: relative; }
 
@@ -482,6 +512,7 @@
     .catNav { padding: 0 12px; }
     .prereq,
     .presets { padding-left: 20px; padding-right: 20px; }
-    .searchInp { width: 190px; }
+    .searchInp { width: 160px; }
+    .langSel { font-size: 0.7rem; padding: 8px 26px 8px 10px; }
     .kbdHint { display: none; }
 }

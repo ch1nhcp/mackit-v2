@@ -2,19 +2,27 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { APPS, CATEGORIES, PRESETS } from './data';
+import {
+    DEFAULT_LANG,
+    LANG_OPTIONS,
+    TRANSLATIONS,
+} from './i18n';
+import type { LangCode } from './i18n';
+import type { CategoryGroup, Preset } from './types';
+import { generateCmd } from './utils';
+
 import AppGrid from './AppGrid';
 import CategoryNav from './CategoryNav';
 import CommandBar from './CommandBar';
 import Header from './Header';
 import PrereqBanner from './PrereqBanner';
 import PresetBar from './PresetBar';
-import { APPS, CATEGORIES, PRESETS } from './data';
 import s from './mackit.module.css';
-import type { CategoryGroup, Preset } from './types';
-import { generateCmd } from './utils';
 
 const COPY_FEEDBACK_MS = 2200;
-const LS_KEY = 'mackit-sel';
+const LS_SEL_KEY = 'mackit-sel';
+const LS_LANG_KEY = 'mackit-lang';
 
 function loadInitialSelection(): Set<string> {
     try {
@@ -24,12 +32,19 @@ function loadInitialSelection(): Set<string> {
             const ids = hash.split(',').filter((id) => APPS.some((a) => a.id === id));
             if (ids.length) return new Set(ids);
         }
-        const saved = localStorage.getItem(LS_KEY);
+        const saved = localStorage.getItem(LS_SEL_KEY);
         if (saved) return new Set(JSON.parse(saved) as string[]);
-    } catch {
-        // ignore storage errors
-    }
+    } catch { /* ignore */ }
     return new Set();
+}
+
+function loadInitialLang(): LangCode {
+    try {
+        if (typeof window === 'undefined') return DEFAULT_LANG;
+        const saved = localStorage.getItem(LS_LANG_KEY) as LangCode | null;
+        if (saved && saved in TRANSLATIONS) return saved;
+    } catch { /* ignore */ }
+    return DEFAULT_LANG;
 }
 
 const MacKitPage = () => {
@@ -39,21 +54,27 @@ const MacKitPage = () => {
     const [copied, setCopied] = useState(false);
     const [shared, setShared] = useState(false);
     const [showPrereq, setShowPrereq] = useState(true);
+    const [lang, setLang] = useState<LangCode>(DEFAULT_LANG);
     const searchRef = useRef<HTMLInputElement>(null);
 
-    // Hydrate from localStorage / URL hash after mount (avoids SSR mismatch)
+    const t = TRANSLATIONS[lang];
+
+    // Hydrate from localStorage after mount
     useEffect(() => {
         setSelected(loadInitialSelection());
+        setLang(loadInitialLang());
     }, []);
 
-    // Persist to localStorage on change
+    // Persist selections
     useEffect(() => {
-        try {
-            localStorage.setItem(LS_KEY, JSON.stringify([...selected]));
-        } catch {
-            // ignore storage errors
-        }
+        try { localStorage.setItem(LS_SEL_KEY, JSON.stringify([...selected])); } catch { /* ignore */ }
     }, [selected]);
+
+    // Persist language + sync <html lang>
+    useEffect(() => {
+        try { localStorage.setItem(LS_LANG_KEY, lang); } catch { /* ignore */ }
+        document.documentElement.lang = lang;
+    }, [lang]);
 
     // Keyboard shortcuts: `/` to focus search, `Esc` to blur+clear
     useEffect(() => {
@@ -86,7 +107,7 @@ const MacKitPage = () => {
 
     const activePreset = useMemo(
         () => PRESETS.find((p) => p.ids.length === selected.size && p.ids.every((id) => selected.has(id))),
-        [selected]
+        [selected],
     );
 
     const filtered = useMemo(() => {
@@ -97,25 +118,26 @@ const MacKitPage = () => {
                 (!lq ||
                     a.name.toLowerCase().includes(lq) ||
                     a.brew.toLowerCase().includes(lq) ||
-                    a.desc.toLowerCase().includes(lq))
+                    a.desc.toLowerCase().includes(lq)),
         );
     }, [activeCategory, query]);
 
+    // Build groups with translated category labels
     const groups = useMemo<CategoryGroup[]>(() => {
         if (activeCategory !== 'all') {
-            const label = CATEGORIES.find((c) => c.id === activeCategory)?.label ?? activeCategory;
+            const label = t.cats[activeCategory] ?? CATEGORIES.find((c) => c.id === activeCategory)?.label ?? activeCategory;
             return [{ id: activeCategory, label, apps: filtered }];
         }
         const byCategory = filtered.reduce<Record<string, CategoryGroup>>((acc, app) => {
             if (!acc[app.cat]) {
-                const label = CATEGORIES.find((c) => c.id === app.cat)?.label ?? app.cat;
+                const label = t.cats[app.cat] ?? CATEGORIES.find((c) => c.id === app.cat)?.label ?? app.cat;
                 acc[app.cat] = { id: app.cat, label, apps: [] };
             }
             acc[app.cat].apps.push(app);
             return acc;
         }, {});
         return Object.values(byCategory);
-    }, [filtered, activeCategory]);
+    }, [filtered, activeCategory, t]);
 
     const commands = useMemo(() => generateCmd(selected, APPS), [selected]);
     const selectedApps = useMemo(() => APPS.filter((a) => selected.has(a.id)), [selected]);
@@ -162,13 +184,29 @@ const MacKitPage = () => {
 
     return (
         <div className={s.root}>
-            <Header ref={searchRef} query={query} onQueryChange={setQuery} />
+            <Header
+                ref={searchRef}
+                t={t}
+                lang={lang}
+                langOptions={LANG_OPTIONS}
+                query={query}
+                onLangChange={setLang}
+                onQueryChange={setQuery}
+            />
 
-            {showPrereq && <PrereqBanner onDismiss={() => setShowPrereq(false)} />}
+            {showPrereq && (
+                <PrereqBanner t={t} onDismiss={() => setShowPrereq(false)} />
+            )}
 
-            <PresetBar presets={PRESETS} activePresetId={activePreset?.id} onApply={applyPreset} />
+            <PresetBar
+                t={t}
+                presets={PRESETS}
+                activePresetId={activePreset?.id}
+                onApply={applyPreset}
+            />
 
             <CategoryNav
+                t={t}
                 categories={CATEGORIES}
                 activeId={activeCategory}
                 catCounts={catCounts}
@@ -178,6 +216,7 @@ const MacKitPage = () => {
 
             <main className={s.gridWrap}>
                 <AppGrid
+                    t={t}
                     groups={groups}
                     selected={selected}
                     showHeaders={activeCategory === 'all'}
@@ -189,6 +228,7 @@ const MacKitPage = () => {
             </main>
 
             <CommandBar
+                t={t}
                 selectedApps={selectedApps}
                 commands={commands}
                 copied={copied}
@@ -199,7 +239,9 @@ const MacKitPage = () => {
                 onRemoveApp={toggle}
             />
 
-            {selected.size === 0 && <div className={s.kbdHint}>press / to search</div>}
+            {selected.size === 0 && (
+                <div className={s.kbdHint}>{t.kbdHint}</div>
+            )}
         </div>
     );
 };

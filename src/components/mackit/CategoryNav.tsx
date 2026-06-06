@@ -1,7 +1,9 @@
+import type { Translations } from './i18n';
 import type { Category } from './types';
 import s from './mackit.module.css';
 
 interface CategoryNavProps {
+    t: Translations;
     categories: Category[];
     activeId: string;
     catCounts: Record<string, number>;
@@ -9,11 +11,12 @@ interface CategoryNavProps {
     onSelect: (id: string) => void;
 }
 
-const CategoryNav = ({ categories, activeId, catCounts, totalSelected, onSelect }: CategoryNavProps) => {
+const CategoryNav = ({ t, categories, activeId, catCounts, totalSelected, onSelect }: CategoryNavProps) => {
     return (
         <nav className={s.catNav} aria-label='App categories'>
             {categories.map((cat) => {
                 const count = cat.id === 'all' ? totalSelected : (catCounts[cat.id] ?? 0);
+                const label = t.cats[cat.id] ?? cat.label;
                 return (
                     <button
                         key={cat.id}
@@ -21,7 +24,7 @@ const CategoryNav = ({ categories, activeId, catCounts, totalSelected, onSelect 
                         onClick={() => onSelect(cat.id)}
                         aria-current={activeId === cat.id ? 'page' : undefined}
                     >
-                        {cat.label}
+                        {label}
                         {count > 0 && <span className={s.catBadge}>{count}</span>}
                     </button>
                 );

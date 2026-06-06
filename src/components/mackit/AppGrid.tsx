@@ -1,19 +1,21 @@
+import type { Translations } from './i18n';
 import type { CategoryGroup } from './types';
 import AppCard from './AppCard';
 import s from './mackit.module.css';
 
 interface AppGridProps {
+    t: Translations;
     groups: CategoryGroup[];
     selected: Set<string>;
     showHeaders: boolean;
     query: string;
-    /** When in single-category view: whether all items in that cat are selected */
     allInCatSelected?: boolean;
     onToggle: (id: string) => void;
     onToggleCatAll?: () => void;
 }
 
 const AppGrid = ({
+    t,
     groups,
     selected,
     showHeaders,
@@ -28,7 +30,7 @@ const AppGrid = ({
         return (
             <div className={s.empty}>
                 <div className={s.emptyCaret}>{'>'}</div>
-                no results for &quot;{query}&quot;
+                {t.noResults(query)}
             </div>
         );
     }
@@ -43,7 +45,7 @@ const AppGrid = ({
                         </span>
                         {!showHeaders && onToggleCatAll && (
                             <button className={s.selAllBtn} onClick={onToggleCatAll}>
-                                {allInCatSelected ? 'deselect all' : 'select all'}
+                                {allInCatSelected ? t.deselectAll : t.selectAll}
                             </button>
                         )}
                     </div>
