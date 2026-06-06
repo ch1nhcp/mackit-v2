@@ -68,6 +68,21 @@
     gap: 10px;
 }
 
+/* ── Contribute link ── */
+.contributeLink {
+    border: 1px solid var(--mk-bd2);
+    border-radius: 5px;
+    color: var(--mk-fg2);
+    font-family: var(--mk-font);
+    font-size: 0.72rem;
+    padding: 7px 13px;
+    text-decoration: none;
+    transition: all 0.12s;
+    white-space: nowrap;
+}
+
+.contributeLink:hover { border-color: var(--mk-gr-bd); color: var(--mk-gr); }
+
 /* ── Language selector ── */
 .langSel {
     appearance: none;

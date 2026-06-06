@@ -1,5 +1,7 @@
 import { forwardRef } from 'react';
 
+import Link from 'next/link';
+
 import type { LangCode, LangOption, Translations } from './i18n';
 import s from './mackit.module.css';
 
@@ -18,25 +20,35 @@ const Header = forwardRef<HTMLInputElement, HeaderProps>(
             <header className={s.hdr}>
                 <div>
                     <div className={s.logo}>
-                        <span className={s.logoDollar} style={{ fontSize: '1.8rem' }}>⌘</span>&nbsp;mackit
+                        <span className={s.logoDollar} style={{ fontSize: '1.8rem' }}>
+                            ⌘
+                        </span>
+                        &nbsp;mackit
                     </div>
                     <div className={s.tagline}>{t.tagline}</div>
                 </div>
 
                 <div className={s.hdrRight}>
+                    <Link href='/contribute' className={s.contributeLink}>
+                        + contribute
+                    </Link>
+
                     <select
                         className={s.langSel}
                         value={lang}
                         onChange={(e) => onLangChange(e.target.value as LangCode)}
-                        aria-label='Language'
-                    >
+                        aria-label='Language'>
                         {langOptions.map((l) => (
-                            <option key={l.code} value={l.code}>{l.native}</option>
+                            <option key={l.code} value={l.code}>
+                                {l.native}
+                            </option>
                         ))}
                     </select>
 
                     <div className={s.searchWrap}>
-                        <span className={s.searchSlash} aria-hidden='true'>/</span>
+                        <span className={s.searchSlash} aria-hidden='true'>
+                            /
+                        </span>
                         <input
                             ref={ref}
                             className={s.searchInp}
@@ -50,7 +62,7 @@ const Header = forwardRef<HTMLInputElement, HeaderProps>(
                 </div>
             </header>
         );
-    },
+    }
 );
 
 Header.displayName = 'Header';
