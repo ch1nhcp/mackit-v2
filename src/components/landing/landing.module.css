@@ -1,0 +1,470 @@
+/* ── CSS custom properties (Terminal design system) ── */
+.root {
+    --mk-bg: #0d1117;
+    --mk-sf: #161b22;
+    --mk-sf2: #1c2128;
+    --mk-bd: #21262d;
+    --mk-bd2: #30363d;
+    --mk-fg: #e6edf3;
+    --mk-fg2: #8b949e;
+    --mk-gr: #3fb950;
+    --mk-gr-bg: rgba(63, 185, 80, 0.08);
+    --mk-gr-bd: rgba(63, 185, 80, 0.3);
+    --mk-font: var(--font-ibm-plex-mono, 'IBM Plex Mono', monospace);
+
+    font-family: var(--mk-font);
+    background: var(--mk-bg);
+    color: var(--mk-fg);
+    min-height: 100vh;
+}
+
+/* ── Nav ── */
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px;
+    border-bottom: 1px solid var(--mk-bd);
+}
+
+.logo {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    line-height: 1;
+}
+
+.logoMark {
+    color: var(--mk-gr);
+    font-size: 1.15rem;
+}
+
+.navRight {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navLink {
+    border: 1px solid var(--mk-bd2);
+    border-radius: 6px;
+    color: var(--mk-fg2);
+    font-family: var(--mk-font);
+    font-size: 0.72rem;
+    padding: 7px 13px;
+    text-decoration: none;
+    transition:
+        border-color 0.12s,
+        color 0.12s;
+    white-space: nowrap;
+}
+
+.navLink:hover {
+    border-color: var(--mk-gr-bd);
+    color: var(--mk-gr);
+}
+
+/* ── Hero ── */
+.hero {
+    padding: 96px 48px 64px;
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+.eyebrow {
+    color: var(--mk-fg2);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.eyebrowDot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background: var(--mk-gr);
+    border-radius: 99px;
+    box-shadow: 0 0 0 3px var(--mk-gr-bg);
+}
+
+.display {
+    font-family: var(--mk-font);
+    font-size: 3.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin: 0 0 24px;
+    color: var(--mk-fg);
+}
+
+.displayAccent {
+    color: var(--mk-gr);
+}
+
+.lead {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--mk-fg2);
+    max-width: 56ch;
+    margin: 0 0 40px;
+}
+
+.cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--mk-gr);
+    color: var(--mk-bg);
+    border: 1px solid var(--mk-gr);
+    border-radius: 6px;
+    font-family: var(--mk-font);
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 12px 20px;
+    text-decoration: none;
+    transition:
+        filter 0.12s,
+        transform 0.12s;
+}
+
+.cta:hover {
+    filter: brightness(1.08);
+}
+.cta:active {
+    transform: translateY(1px);
+}
+
+.ctaRow {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.ctaGhost {
+    color: var(--mk-fg2);
+    font-size: 0.85rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--mk-bd2);
+    padding-bottom: 2px;
+    transition:
+        color 0.12s,
+        border-color 0.12s;
+}
+
+.ctaGhost:hover {
+    color: var(--mk-fg);
+    border-color: var(--mk-fg2);
+}
+
+/* ── Demo terminal block ── */
+.term {
+    margin: 48px 0 0;
+    background: var(--mk-sf);
+    border: 1px solid var(--mk-bd);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.termBar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--mk-bd);
+    background: var(--mk-sf2);
+}
+
+.termDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 99px;
+    background: var(--mk-bd2);
+}
+
+.termTitle {
+    margin-left: 10px;
+    color: var(--mk-fg2);
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+}
+
+.termBody {
+    padding: 20px 22px;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.termPrompt {
+    color: var(--mk-gr);
+}
+.termCmd {
+    color: var(--mk-fg);
+}
+.termArg {
+    color: var(--mk-fg2);
+}
+.termOk {
+    color: var(--mk-gr);
+}
+.termComment {
+    color: var(--mk-fg2);
+}
+
+.caret {
+    display: inline-block;
+    width: 8px;
+    height: 1em;
+    background: var(--mk-gr);
+    vertical-align: -2px;
+    margin-left: 4px;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* ── Section primitive ── */
+.section {
+    padding: 64px 48px;
+    max-width: 1080px;
+    margin: 0 auto;
+    border-top: 1px solid var(--mk-bd);
+}
+
+.sectionLabel {
+    color: var(--mk-fg2);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 20px;
+}
+
+.h1 {
+    font-family: var(--mk-font);
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--mk-fg);
+    margin: 0 0 32px;
+    line-height: 1.15;
+}
+
+/* ── Steps ── */
+.steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.step {
+    background: var(--mk-sf);
+    border: 1px solid var(--mk-bd);
+    border-radius: 8px;
+    padding: 24px;
+}
+
+.stepNum {
+    color: var(--mk-gr);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 12px;
+}
+
+.stepTitle {
+    color: var(--mk-fg);
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 0 0 8px;
+}
+
+.stepBody {
+    color: var(--mk-fg2);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    margin: 0;
+}
+
+/* ── Stats strip ── */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid var(--mk-bd);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--mk-sf);
+}
+
+.statCell {
+    padding: 24px;
+    border-right: 1px solid var(--mk-bd);
+}
+
+.statCell:last-child {
+    border-right: none;
+}
+
+.statNum {
+    color: var(--mk-fg);
+    font-family: var(--mk-font);
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1;
+}
+
+.statNumAccent {
+    color: var(--mk-gr);
+}
+
+.statLabel {
+    color: var(--mk-fg2);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    margin-top: 8px;
+}
+
+/* ── Why list ── */
+.whyList {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.whyItem {
+    background: var(--mk-sf);
+    border: 1px solid var(--mk-bd);
+    border-radius: 8px;
+    padding: 20px 24px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.whyMark {
+    color: var(--mk-gr);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    flex-shrink: 0;
+}
+
+.whyTitle {
+    color: var(--mk-fg);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0 0 4px;
+}
+
+.whyBody {
+    color: var(--mk-fg2);
+    font-size: 0.85rem;
+    line-height: 1.55;
+    margin: 0;
+}
+
+/* ── Final CTA ── */
+.finalCta {
+    padding: 96px 48px 64px;
+    max-width: 1080px;
+    margin: 0 auto;
+    border-top: 1px solid var(--mk-bd);
+    text-align: center;
+}
+
+.finalLabel {
+    color: var(--mk-fg2);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 16px;
+}
+
+.finalTitle {
+    font-family: var(--mk-font);
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--mk-fg);
+    margin: 0 0 32px;
+    line-height: 1.15;
+}
+
+/* ── Footer ── */
+.footer {
+    padding: 32px 48px;
+    border-top: 1px solid var(--mk-bd);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    color: var(--mk-fg2);
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+}
+
+.footerLinks {
+    display: flex;
+    gap: 20px;
+}
+
+.footerLink {
+    color: var(--mk-fg2);
+    text-decoration: none;
+    transition: color 0.12s;
+}
+
+.footerLink:hover {
+    color: var(--mk-gr);
+}
+
+/* ── Responsive ── */
+@media (max-width: 760px) {
+    .nav {
+        padding: 20px 24px;
+    }
+    .hero {
+        padding: 64px 24px 48px;
+    }
+    .section {
+        padding: 48px 24px;
+    }
+    .finalCta {
+        padding: 64px 24px 48px;
+    }
+    .footer {
+        padding: 24px;
+    }
+    .display {
+        font-size: 2.25rem;
+    }
+    .h1,
+    .finalTitle {
+        font-size: 1.5rem;
+    }
+    .steps,
+    .stats,
+    .whyList {
+        grid-template-columns: 1fr;
+    }
+    .statCell {
+        border-right: none;
+        border-bottom: 1px solid var(--mk-bd);
+    }
+    .statCell:last-child {
+        border-bottom: none;
+    }
+}
